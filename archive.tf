@@ -8,10 +8,12 @@ module "assert_proper_output_archive_name" {
 }
 
 locals {
-  archive_needed          = var.source_directory != null || var.unzipped_source_file != null
-  output_default_filename = local.archive_needed ? "${var.source_directory != null ? var.source_directory : var.unzipped_source_file}.zip" : null
-  output_filename         = var.archive_output_directory != null ? var.archive_output_directory : local.output_default_filename
-  lambda_filename = var.archive_needed ? local.output_filename : var.lambda_config.filename
+  archive_needed           = var.source_directory != null || var.unzipped_source_file != null
+  output_default_filename  = local.archive_needed ? basename("${var.source_directory != null ? var.source_directory : var.unzipped_source_file}.zip") : ""
+  archive_output_directory = trimsuffix(trimsuffix(var.archive_output_directory != null ? var.archive_output_directory : path.root, "/"), "\\")
+  output_fullpath          = "${local.archive_output_directory}/${local.output_default_filename}"
+  // The name of the file for the Lambda resource to upload
+  lambda_filename = local.archive_needed ? local.output_fullpath : var.lambda_config.filename
 }
 
 // If a directory was provided, create an archive
@@ -21,8 +23,8 @@ data "archive_file" "archive" {
   // If a sourcefile is specified, use that
   source_file = var.unzipped_source_file != null ? var.unzipped_source_file : null
   // Only use the source directory if no file is specified
-  source_dir  = var.source_directory == null ? var.source_directory : null
-  output_path = "${var.archive_output_path}/${local.output_filename}"
+  source_dir  = var.source_directory != null ? var.source_directory : null
+  output_path = local.output_fullpath
 }
 
 locals {

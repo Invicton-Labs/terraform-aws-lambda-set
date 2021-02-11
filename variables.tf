@@ -12,7 +12,7 @@ variable "lambda_config" {
       target_arn = string
     }))
     handler                        = string
-    role                           = string
+    role                           = optional(string)
     description                    = optional(string)
     layers                         = optional(list(string))
     memory_size                    = optional(number)
@@ -66,8 +66,9 @@ variable "unzipped_source_file" {
 variable "archive_output_directory" {
   description = "The directory where the Lambda archive should be saved. Only applies if the `source_directory` or `unzipped_source_file` variable is provided. Defaults to saving in the `path.root` directory."
   type        = string
-  default     = path.root
+  default     = null
 }
+
 variable "archive_output_name" {
   description = "The filename to use for the Lambda archive. Only applies if the `source_directory` or `unzipped_source_file` variable is provided. Defaults to using the name of the directory or file being archived."
   type        = string
@@ -111,8 +112,8 @@ variable "logs_subscriptions" {
   description = "A list of configurations for Lambda subscriptions to the CloudWatch Logs Group for this Lambda. Each element should be a map with `arn` (required), `name` (optional), and `filter` (optional)."
   type = list(object({
     arn    = string
-    name   = default(string, "Lambda Subscription")
-    filter = default(string, "")
+    name   = optional(string)
+    filter = optional(string)
   }))
   default = []
 }

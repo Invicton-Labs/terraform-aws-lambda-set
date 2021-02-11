@@ -32,8 +32,24 @@ module "assert_single_source2" {
 
 // Ensure that if an IAM role for the Lambda execution was provided, there weren't also IAM policies provided
 module "assert_no_policies_for_provided_role" {
-  source  = "Invicton-Labs/assertion/null"
-  version = "0.1.0"
-  condition = var.lambda_config.role == null || length(var.role_policy_arns) == 0
+  source        = "Invicton-Labs/assertion/null"
+  version       = "0.1.0"
+  condition     = var.lambda_config.role == null || length(var.role_policy_arns) == 0
   error_message = "The `role_policy_arns` variable cannot be provided if the `role` field in the `lambda_config` variable is provided."
+}
+
+// Ensure that Edge functions are only defined in the us-east-1 region
+module "assert_edge_region" {
+  source        = "Invicton-Labs/assertion/null"
+  version       = "0.1.0"
+  condition     = !var.edge || data.aws_region.current.name == "us-east-1"
+  error_message = "If the `edge` variable is `true`, the lambda must be created in the `us-east-1` region."
+}
+
+// Ensure that Edge functions are published
+module "assert_edge_published" {
+  source        = "Invicton-Labs/assertion/null"
+  version       = "0.1.0"
+  condition     = !var.edge || var.lambda_config.publish == true
+  error_message = "If the `edge` variable is `true`, the `publish` variable in `lambda_config` must also be `true`."
 }
