@@ -28,5 +28,5 @@ data "archive_file" "archive" {
 }
 
 locals {
-  archive_base64sha256 = length(data.archive_file.archive) > 0 ? data.archive_file.archive[0].output_base64sha256 : (var.lambda_config.filename != null ? base64sha256(file(var.lambda_config.filename)) : (var.lambda_config.source_code_hash != null ? var.lambda_config.source_code_hash : null))
+  archive_base64sha256 = length(data.archive_file.archive) > 0 ? data.archive_file.archive[0].output_base64sha256 : (var.lambda_config.filename != null ? filebase64sha256(var.lambda_config.filename) : (var.lambda_config.source_code_hash != null ? var.lambda_config.source_code_hash : null))
 }

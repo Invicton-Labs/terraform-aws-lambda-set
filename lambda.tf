@@ -32,14 +32,14 @@ resource "aws_lambda_function" "function" {
   reserved_concurrent_executions = var.lambda_config.reserved_concurrent_executions
   publish                        = var.lambda_config.publish
   kms_key_arn                    = var.lambda_config.kms_key_arn
-  source_code_hash               = var.lambda_config.source_code_hash
+  source_code_hash               = local.archive_base64sha256
   tags                           = var.lambda_config.tags
   code_signing_config_arn        = var.lambda_config.code_signing_config_arn
 
   dynamic "environment" {
     for_each = var.lambda_config.environment != null ? [1] : []
     content {
-      variables = var.lambda_config.environment
+      variables = var.lambda_config.environment.variables
     }
   }
 

@@ -29,6 +29,13 @@ module "assert_single_source2" {
   )
   error_message = "The `unzipped_source_file` variable cannot be provided if the `source_directory` variable or any of the `filename`, `s3_bucket`, `s3_key`, `s3_object_version`, `image_uri`, `package_type`, or `image_config` fields in the `lambda_config` variable are provided."
 }
+// Ensure that if a filename is provided, no source hash is provided (it will automatically be calculated)
+module "assert_filename_source_hash" {
+  source        = "Invicton-Labs/assertion/null"
+  version       = "0.1.0"
+  condition     = var.lambda_config.filename == null || var.lambda_config.source_code_hash == null
+  error_message = "The `source_code_hash` field in the `lambda_config` variable cannot be provided if the `filename` field in the `lambda_config` variable is provided (the source file hash will be automatically calculated)."
+}
 
 // Ensure that if an IAM role for the Lambda execution was provided, there weren't also IAM policies provided
 module "assert_no_policies_for_provided_role" {

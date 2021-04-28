@@ -20,5 +20,5 @@ resource "aws_lambda_permission" "allow_schedule" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.function.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.lambda[count.index]
+  source_arn    = aws_cloudwatch_event_rule.lambda[count.index].arn
 }

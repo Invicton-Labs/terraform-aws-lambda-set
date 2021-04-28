@@ -88,7 +88,7 @@ variable "cloudwatch_logs_retention_days" {
 }
 
 variable "cloudwatch_logs_kms_key_id" {
-  description = "The ID of the KMS key to use for encrypting the CloudWatch logs for this Lambda.,"
+  description = "The ID of the KMS key to use for encrypting the CloudWatch logs for this Lambda."
   type        = number
   default     = null
 }
