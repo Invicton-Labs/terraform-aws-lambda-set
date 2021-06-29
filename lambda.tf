@@ -1,7 +1,7 @@
 // Create the Cloudwatch log group
 module "log_group" {
-  source = "../terraform-aws-log-group"
-  #version = "0.1.0"
+  source  = "Invicton-Labs/log-group/aws"
+  version = "0.1.0"
   log_group_config = {
     name              = "/aws/lambda/${var.edge ? "us-east-1." : ""}${var.lambda_config.function_name}"
     retention_in_days = var.cloudwatch_logs_retention_days
