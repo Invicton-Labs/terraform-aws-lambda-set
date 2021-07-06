@@ -11,7 +11,7 @@ resource "aws_cloudwatch_event_target" "lambda" {
   for_each = aws_cloudwatch_event_rule.lambda
   rule     = each.value.name
   arn      = aws_lambda_function.function.arn
-  input    = each.value.input
+  input    = var.schedules[each.key].input
 }
 
 // Create a permission that allows the CloudWatch event to invoke the Lambda
