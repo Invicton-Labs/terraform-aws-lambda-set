@@ -1,7 +1,7 @@
 // Create a rule that runs on a schedule
 resource "aws_cloudwatch_event_rule" "lambda" {
   for_each            = var.schedules
-  name                = "${var.lambda_config.function_name} - ${each.key}"
+  name                = "${var.lambda_config.function_name}-${each.key}"
   description         = each.value.description
   schedule_expression = each.value.schedule_expression
 }

@@ -103,7 +103,7 @@ variable "execution_services" {
 }
 
 variable "schedules" {
-  description = "A map of schedules to run this Lambda on. Keys are the schedule display names, values are maps with `schedule_expression` (e.g. \"rate(5 minutes)\"), `input` (the input that goes to the Lambda function), and `description`."
+  description = "A map of schedules to run this Lambda on. Keys are the schedule display names (must match the regex `[\\.\\-_A-Za-z0-9]+$`), values are maps with `schedule_expression` (e.g. \"rate(5 minutes)\"), `input` (the input that goes to the Lambda function), and `description`."
   type = map(object({
     schedule_expression = string
     input               = optional(string)
