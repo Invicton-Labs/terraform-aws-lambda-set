@@ -103,9 +103,13 @@ variable "execution_services" {
 }
 
 variable "schedules" {
-  description = "A list of schedules to run this Lambda on (uses CloudWatch Events schedule notation)."
-  type        = list(string)
-  default     = []
+  description = "A map of schedules to run this Lambda on. Keys are the schedule display names, values are maps with `schedule_expression` (e.g. \"rate(5 minutes)\"), `input` (the input that goes to the Lambda function), and `description`."
+  type = map(object({
+    schedule_expression = string
+    input               = optional(string)
+    description         = optional(string)
+  }))
+  default = {}
 }
 
 variable "logs_subscriptions" {
