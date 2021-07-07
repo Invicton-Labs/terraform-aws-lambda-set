@@ -37,7 +37,7 @@ resource "aws_iam_role" "lambda_role" {
 
 // Split up the Lambda role's ARN
 data "aws_arn" "lambda_role" {
-  arn = var.lambda_config.role != null ? var.lambda_config.role != null : aws_iam_role.lambda_role[0].arn
+  arn = var.lambda_config.role != null ? var.lambda_config.role : aws_iam_role.lambda_role[0].arn
 }
 
 locals {
@@ -49,7 +49,9 @@ locals {
 
 // Attach a policy that allows it to write logs
 resource "aws_iam_role_policy" "cloudwatch_write" {
-  name = "cloudwatch-write"
+  // Only attach the policy if a new role was created OR it should be applied to the existing role
+  count = var.lambda_config.role == null || var.add_cloudwatch_logs_access_to_role ? 1 : 0
+  name  = "cloudwatch-write"
   // Extract the role name from the ARN, since this resource can't handle an ARN here
   role   = local.role_id
   policy = module.log_group.logging_policy_json
@@ -57,7 +59,8 @@ resource "aws_iam_role_policy" "cloudwatch_write" {
 
 // If necessary, attach a policy that allows it to access the VPC
 resource "aws_iam_role_policy" "vpc_access" {
-  count = var.lambda_config.vpc_config != null ? 1 : 0
+  // Only attach the policy if VPC config was given AND either a new role was created or it should be applied to the existing role
+  count = var.lambda_config.vpc_config != null && (var.lambda_config.role == null || var.add_vpc_access_to_role) ? 1 : 0
   name  = "vpc-access"
   role  = local.role_id
 

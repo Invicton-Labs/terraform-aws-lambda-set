@@ -93,6 +93,18 @@ variable "cloudwatch_logs_kms_key_id" {
   default     = null
 }
 
+variable "add_vpc_access_to_role" {
+  description = "Whether to add VPC access to the provided IAM role (only applies if both `role` and `vpc_config` values are provided in the `lambda_config` input)."
+  type        = bool
+  default     = false
+}
+
+variable "add_cloudwatch_logs_access_to_role" {
+  description = "Whether to add write access to the CloudWatch Logs group to the provided IAM role (only applies if the `role` value was provided in the `lambda_config` input)."
+  type        = bool
+  default     = false
+}
+
 variable "execution_services" {
   description = "A list of service/ARN pairs that should be allowed to invoke this Lambda. The service must be specified, but the ARN can be omitted to allow invokations from all resources in that service."
   type = list(object({
