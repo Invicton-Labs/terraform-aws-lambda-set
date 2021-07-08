@@ -1,7 +1,7 @@
 // If the archive_output_name variable is provided, it must end in ".zip"
 module "assert_proper_output_archive_name" {
   source        = "Invicton-Labs/assertion/null"
-  version       = "0.1.0"
+  version       = "0.1.1"
   count         = var.archive_output_name != null ? 1 : 0
   condition     = length(var.archive_output_name) > 4 && lower(substr(var.archive_output_name, length(var.archive_output_name) - 4, 4)) == ".zip"
   error_message = "The `archive_output_name` variable, if provided, must end in `.zip`."
