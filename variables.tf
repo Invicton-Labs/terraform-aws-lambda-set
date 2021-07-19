@@ -75,6 +75,12 @@ variable "archive_output_name" {
   default     = null
 }
 
+variable "role_policies" {
+  description = "A list of policies (in JSON format) to attach to the role this Lambda uses for execution. This variable conflicts with the `role` field in the `lambda_config` variable (this module will not attach these policies to a provided role, as that should be done outside this module)."
+  type        = list(string)
+  default     = []
+}
+
 variable "role_policy_arns" {
   description = "A list of IAM policy ARNs to attach to the role this Lambda uses for execution. This variable conflicts with the `role` field in the `lambda_config` variable (this module will not attach these policies to a provided role, as that should be done outside this module)."
   type        = list(string)
