@@ -84,14 +84,14 @@ EOF
 
 // Attach any policies provided as arguments
 resource "aws_iam_role_policy" "role_policy" {
-  for_each = toset(var.role_policies)
-  role     = local.role_id
-  policy   = each.value
+  count  = length(var.role_policies)
+  role   = local.role_id
+  policy = var.role_policies[count.index]
 }
 
 // Attach any policy ARNs provided as arguments
 resource "aws_iam_role_policy_attachment" "role_policy_attachment" {
-  for_each   = toset(var.role_policy_arns)
+  count      = length(var.role_policy_arns)
   role       = local.role_id
-  policy_arn = each.value
+  policy_arn = var.role_policy_arns[count.index]
 }
