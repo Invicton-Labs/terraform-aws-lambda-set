@@ -25,6 +25,8 @@ data "archive_file" "archive" {
   // Only use the source directory if no file is specified
   source_dir  = var.source_directory != null ? var.source_directory : null
   output_path = local.output_fullpath
+  // Proper file permissions for Lambda (https://aws.amazon.com/premiumsupport/knowledge-center/lambda-deployment-package-errors/)
+  output_file_mode = "0644"
 }
 
 locals {
