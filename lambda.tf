@@ -1,16 +1,3 @@
-// Create the Cloudwatch log group
-module "log_group" {
-  source  = "Invicton-Labs/log-group/aws"
-  version = "0.2.0"
-  log_group_config = {
-    name              = "/aws/lambda/${var.edge ? "us-east-1." : ""}${var.lambda_config.function_name}"
-    retention_in_days = var.cloudwatch_logs_retention_days
-    kms_key_id        = var.cloudwatch_logs_kms_key_id
-    tags              = var.lambda_config.tags
-  }
-  subscriptions = var.logs_subscriptions
-}
-
 // Create the actual function
 resource "aws_lambda_function" "function" {
   // Don't create the function until the log group has been created

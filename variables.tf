@@ -130,8 +130,19 @@ variable "schedules" {
   default = {}
 }
 
-variable "logs_subscriptions" {
-  description = "A list of configurations for Lambda subscriptions to the CloudWatch Logs Group for this Lambda. Each element should be a map with `arn` (required), `name` (optional), and `filter` (optional)."
+variable "logs_lambda_subscriptions" {
+  description = "A list of configurations for Lambda subscriptions to the CloudWatch Logs Group for this Lambda. Each element should be a map with `destination_arn` (required), `name` (optional), `filter_pattern` (optional), and `distribution` (optional)."
+  type = list(object({
+    destination_arn = string
+    name            = optional(string)
+    filter_pattern  = optional(string)
+    distribution    = optional(string)
+  }))
+  default = []
+}
+
+variable "logs_non_lambda_subscriptions" {
+  description = "A list of configurations for non-Lambda subscriptions to the CloudWatch Logs Group for this Lambda. Each element should be a map with `destination_arn` (required), `name` (optional), `filter_pattern` (optional), `role_arn` (optional), and `distribution` (optional)."
   type = list(object({
     destination_arn = string
     name            = optional(string)
