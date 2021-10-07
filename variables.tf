@@ -88,9 +88,9 @@ variable "role_policy_arns" {
 }
 
 variable "cloudwatch_logs_retention_days" {
-  description = "The number of days to retain CloudWatch logs for this Lambda. Default: 14."
+  description = "The number of days to retain CloudWatch logs for this Lambda. Defaults to the account default."
   type        = number
-  default     = 14
+  default     = null
 }
 
 variable "cloudwatch_logs_kms_key_id" {
