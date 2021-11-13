@@ -2,26 +2,27 @@
 resource "aws_lambda_function" "function" {
   // Don't create the function until the log group has been created
   depends_on                     = [module.log_group.log_group]
+  function_name                  = var.lambda_config.function_name
+  role                           = local.role_arn
+  architectures                  = var.lambda_config.architectures
+  code_signing_config_arn        = var.lambda_config.code_signing_config_arn
+  description                    = var.lambda_config.description
   filename                       = local.lambda_filename
+  handler                        = var.lambda_config.handler
+  image_uri                      = var.lambda_config.image_uri
+  kms_key_arn                    = var.lambda_config.kms_key_arn
+  layers                         = var.lambda_config.layers
+  memory_size                    = var.lambda_config.memory_size
+  package_type                   = var.lambda_config.package_type
+  publish                        = var.lambda_config.publish
+  reserved_concurrent_executions = var.lambda_config.reserved_concurrent_executions
+  runtime                        = var.lambda_config.runtime
   s3_bucket                      = var.lambda_config.s3_bucket
   s3_key                         = var.lambda_config.s3_key
   s3_object_version              = var.lambda_config.s3_object_version
-  image_uri                      = var.lambda_config.image_uri
-  package_type                   = var.lambda_config.package_type
-  function_name                  = var.lambda_config.function_name
-  handler                        = var.lambda_config.handler
-  role                           = local.role_arn
-  description                    = var.lambda_config.description
-  layers                         = var.lambda_config.layers
-  memory_size                    = var.lambda_config.memory_size
-  runtime                        = var.lambda_config.runtime
-  timeout                        = var.lambda_config.timeout
-  reserved_concurrent_executions = var.lambda_config.reserved_concurrent_executions
-  publish                        = var.lambda_config.publish
-  kms_key_arn                    = var.lambda_config.kms_key_arn
   source_code_hash               = local.archive_base64sha256
   tags                           = var.lambda_config.tags
-  code_signing_config_arn        = var.lambda_config.code_signing_config_arn
+  timeout                        = var.lambda_config.timeout
 
   dynamic "environment" {
     for_each = var.lambda_config.environment != null ? [1] : []

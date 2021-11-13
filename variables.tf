@@ -1,47 +1,48 @@
 variable "lambda_config" {
   description = "The Lambda function configuration. The variables are the same as the `aws_lambda_function` resource."
   type = object({
-    filename          = optional(string)
-    s3_bucket         = optional(string)
-    s3_key            = optional(string)
-    s3_object_version = optional(string)
-    image_uri         = optional(string)
-    package_type      = optional(string)
-    function_name     = string
+    function_name           = string
+    role                    = optional(string)
+    architectures           = optional(list(string))
+    code_signing_config_arn = optional(string)
     dead_letter_config = optional(object({
       target_arn = string
     }))
-    handler                        = string
-    role                           = optional(string)
-    description                    = optional(string)
-    layers                         = optional(list(string))
-    memory_size                    = optional(number)
-    runtime                        = optional(string)
-    timeout                        = optional(number)
-    reserved_concurrent_executions = optional(number)
-    publish                        = optional(bool)
-    vpc_config = optional(object({
-      subnet_ids         = list(string)
-      security_group_ids = list(string)
-    }))
-    tracing_config = optional(object({
-      mode = string
-    }))
+    description = optional(string)
     environment = optional(object({
       variables = map(any)
     }))
-    kms_key_arn      = optional(string)
-    source_code_hash = optional(string)
-    tags             = optional(map(string))
     file_system_config = optional(object({
       arn              = string
       local_mount_path = string
     }))
-    code_signing_config_arn = optional(string)
+    filename = optional(string)
+    handler  = string
     image_config = optional(object({
       entry_point       = optional(string)
       command           = optional(string)
       working_directory = optional(string)
+    }))
+    image_uri                      = optional(string)
+    kms_key_arn                    = optional(string)
+    layers                         = optional(list(string))
+    memory_size                    = optional(number)
+    package_type                   = optional(string)
+    publish                        = optional(bool)
+    reserved_concurrent_executions = optional(number)
+    runtime                        = optional(string)
+    s3_bucket                      = optional(string)
+    s3_key                         = optional(string)
+    s3_object_version              = optional(string)
+    source_code_hash               = optional(string)
+    tags                           = optional(map(string))
+    timeout                        = optional(number)
+    tracing_config = optional(object({
+      mode = string
+    }))
+    vpc_config = optional(object({
+      subnet_ids         = list(string)
+      security_group_ids = list(string)
     }))
   })
 }
