@@ -8,11 +8,13 @@ module "assert_proper_output_archive_name" {
 }
 
 // Create a UUID to be used for the output archive file name, so it doesn't clash with others
-resource "random_uuid" "archive_name" {}
+resource "random_uuid" "archive_name" {
+  count = local.archive_needed ? 1 : 0
+}
 
 locals {
   archive_needed           = var.source_directory != null || var.unzipped_source_file != null
-  output_default_filename  = local.archive_needed && var.archive_output_name == null ? "${basename(var.source_directory != null ? var.source_directory : var.unzipped_source_file)}-${random_uuid.archive_name.result}.zip" : null
+  output_default_filename  = local.archive_needed && var.archive_output_name == null ? "${basename(var.source_directory != null ? var.source_directory : var.unzipped_source_file)}-${random_uuid.archive_name[0].result}.zip" : null
   archive_output_directory = trimsuffix(trimsuffix(var.archive_output_directory != null ? var.archive_output_directory : path.root, "/"), "\\")
   output_fullpath          = local.archive_needed ? "${local.archive_output_directory}/${var.archive_output_name != null ? var.archive_output_name : local.output_default_filename}" : null
   // The name of the file for the Lambda resource to upload
