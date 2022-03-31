@@ -14,7 +14,7 @@ locals {
   archive_needed           = var.source_directory != null || var.unzipped_source_file != null
   output_default_filename  = local.archive_needed && var.archive_output_name == null ? "${basename(var.source_directory != null ? var.source_directory : var.unzipped_source_file)}-${random_uuid.archive_name.result}.zip" : null
   archive_output_directory = trimsuffix(trimsuffix(var.archive_output_directory != null ? var.archive_output_directory : path.root, "/"), "\\")
-  output_fullpath          = "${local.archive_output_directory}/${var.archive_output_name != null ? var.archive_output_name : local.output_default_filename}"
+  output_fullpath          = local.archive_needed ? "${local.archive_output_directory}/${var.archive_output_name != null ? var.archive_output_name : local.output_default_filename}" : null
   // The name of the file for the Lambda resource to upload
   lambda_filename = local.archive_needed ? local.output_fullpath : var.lambda_config.filename
 }
