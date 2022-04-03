@@ -65,7 +65,7 @@ variable "unzipped_source_file" {
 }
 
 variable "archive_output_directory" {
-  description = "The directory where the Lambda archive should be saved. Only applies if the `source_directory` or `unzipped_source_file` variable is provided. Defaults to saving in the `path.root` directory."
+  description = "The directory where the Lambda archive should be saved. Only applies if the `source_directory` or `unzipped_source_file` variable is provided. Defaults to saving in the `path.module` directory (the path of this installed module)."
   type        = string
   default     = null
 }
