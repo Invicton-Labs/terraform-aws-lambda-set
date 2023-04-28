@@ -1,10 +1,10 @@
 // If the archive_output_name variable is provided, it must end in ".zip"
 module "assert_proper_output_archive_name" {
   source        = "Invicton-Labs/assertion/null"
-  version       = "0.2.1"
+  version       = "~>0.2.4"
   count         = var.archive_output_name != null ? 1 : 0
   condition     = length(var.archive_output_name) > 4 && lower(substr(var.archive_output_name, length(var.archive_output_name) - 4, 4)) == ".zip" && length(regexall("[/\\\\]+", var.archive_output_name)) == 0
-  error_message = "The `archive_output_name` variable, if provided, must end in `.zip` and may not contain `\\` or `/`."
+  error_message = "The `archive_output_name` variable, if provided, must end in `.zip` and may not contain `\\` or `/` (received: \"${var.archive_output_name}\")."
 }
 
 // Create a UUID to be used for the output archive file name, so it doesn't clash with others
