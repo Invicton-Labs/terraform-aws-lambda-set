@@ -57,7 +57,7 @@ module "assert_no_policies_for_provided_role" {
 module "assert_edge_region" {
   source        = "Invicton-Labs/assertion/null"
   version       = "~>0.2.4"
-  condition     = !var.edge ? true : data.aws_region.current.name == "us-east-1"
+  condition     = !var.edge ? true : data.aws_region.current.region == "us-east-1"
   error_message = "If the `edge` variable is `true`, the lambda must be created in the `us-east-1` region."
 }
 
