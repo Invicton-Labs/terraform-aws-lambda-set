@@ -41,7 +41,7 @@ module "assert_filename_source_hash" {
 module "assert_no_policy_arns_for_provided_role" {
   source        = "Invicton-Labs/assertion/null"
   version       = "~>0.2.4"
-  condition     = var.lambda_config.role == null ? true : length(var.role_policy_arns) == 0
+  condition     = var.iam_role_arn == null ? true : length(var.role_policy_arns) == 0
   error_message = "The `role_policy_arns` variable cannot be provided if the `role` field in the `lambda_config` variable is provided."
 }
 
@@ -49,7 +49,7 @@ module "assert_no_policy_arns_for_provided_role" {
 module "assert_no_policies_for_provided_role" {
   source        = "Invicton-Labs/assertion/null"
   version       = "~>0.2.4"
-  condition     = var.lambda_config.role == null ? true : length(var.role_policies) == 0
+  condition     = var.iam_role_arn == null ? true : length(var.role_policies) == 0
   error_message = "The `role_policies` variable cannot be provided if the `role` field in the `lambda_config` variable is provided."
 }
 
@@ -57,7 +57,7 @@ module "assert_no_policies_for_provided_role" {
 module "assert_edge_region" {
   source        = "Invicton-Labs/assertion/null"
   version       = "~>0.2.4"
-  condition     = !var.edge ? true : data.aws_region.current.region == "us-east-1"
+  condition     = !var.edge ? true : local.region == "us-east-1"
   error_message = "If the `edge` variable is `true`, the lambda must be created in the `us-east-1` region."
 }
 

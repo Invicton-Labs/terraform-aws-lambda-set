@@ -1,8 +1,24 @@
+variable "region" {
+  description = "The AWS region to deploy the resources in. If not provided, the provider's region will be used."
+  type        = string
+  default     = null
+}
+
+variable "function_name" {
+  description = "The name for the Lambda function."
+  type        = string
+  nullable    = false
+}
+
+variable "iam_role_arn" {
+  description = "The ARN of the IAM role to use for the Lambda. If not provided, a new role will be created."
+  type        = string
+  default     = null
+}
+
 variable "lambda_config" {
   description = "The Lambda function configuration. The variables are the same as the `aws_lambda_function` resource."
   type = object({
-    function_name           = string
-    role                    = optional(string)
     architectures           = optional(list(string))
     code_signing_config_arn = optional(string)
     dead_letter_config = optional(object({

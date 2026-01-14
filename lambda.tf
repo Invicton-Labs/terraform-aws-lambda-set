@@ -1,8 +1,14 @@
 // Create the actual function
 resource "aws_lambda_function" "function" {
   // Don't create the function until the log group has been created
-  depends_on                     = [module.log_group.log_group]
-  function_name                  = var.lambda_config.function_name
+  depends_on = [
+    module.log_group.log_group,
+    // This forces it to wait for the role permissions to be updated before updating the function
+    aws_iam_role_policy_attachment.role_policy_attachment,
+    aws_iam_role_policy.role_policy,
+  ]
+  region                         = local.region
+  function_name                  = var.function_name
   role                           = local.role_arn
   architectures                  = var.lambda_config.architectures
   code_signing_config_arn        = var.lambda_config.code_signing_config_arn
@@ -74,6 +80,7 @@ resource "aws_lambda_function" "function" {
 // For each service that should be able to execute this function, add a permission to do so
 resource "aws_lambda_permission" "allow_execution" {
   count         = length(var.execution_services)
+  region        = local.region
   statement_id  = "AllowExecutionFromService-${count.index}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.function.function_name
