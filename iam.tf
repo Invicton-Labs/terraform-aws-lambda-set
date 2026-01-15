@@ -20,11 +20,15 @@ data "aws_iam_policy_document" "assume_role_policy" {
         var.edge ? ["edgelambda.amazonaws.com"] : []
       )
     }
+    // Restrict so the role can ONLY be assume by this specific Lambda (prevent it from being accidentally assigned to other Lambdas)
     condition {
-      test     = "ArnEquals"
-      variable = "iam:AssociatedResourceARN"
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
       values = [
-        "arn:aws:lambda:${local.region}:${data.aws_caller_identity.current.account_id}:function:${var.function_name}"
+        // Unqualified ARN
+        "arn:aws:lambda:${local.region}:${data.aws_caller_identity.current.account_id}:function:${var.function_name}",
+        // Qualified ARN (with version)
+        "arn:aws:lambda:${local.region}:${data.aws_caller_identity.current.account_id}:function:${var.function_name}:*"
       ]
     }
   }
