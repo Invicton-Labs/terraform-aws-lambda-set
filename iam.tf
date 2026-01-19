@@ -1,5 +1,6 @@
 locals {
   shortened_role_name_prefix = length(var.function_name) <= 31 ? var.function_name : "${substr(var.function_name, 0, 15)}-${substr(var.function_name, length(var.function_name) - 15, 15)}"
+  predetermined_lambda_arn   = "arn:aws:lambda:${local.region}:${data.aws_caller_identity.current.account_id}:function:${var.function_name}"
 }
 
 module "iam_role_provided" {
@@ -26,9 +27,9 @@ data "aws_iam_policy_document" "assume_role_policy" {
       variable = "aws:SourceArn"
       values = [
         // Unqualified ARN
-        "arn:aws:lambda:${local.region}:${data.aws_caller_identity.current.account_id}:function:${var.function_name}",
+        local.predetermined_lambda_arn,
         // Qualified ARN (with version)
-        "arn:aws:lambda:${local.region}:${data.aws_caller_identity.current.account_id}:function:${var.function_name}:*"
+        "${local.predetermined_lambda_arn}:*"
       ]
     }
   }

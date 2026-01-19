@@ -1,3 +1,7 @@
+output "iam_role_arn" {
+  description = "The value of the `iam_role_arn` input variable if provided, or the ARN of the newly created role if not."
+  value       = module.iam_role_provided.provided ? var.iam_role_arn : aws_iam_role.lambda_role[0].arn
+}
 output "region" {
   description = "The AWS region where the resources are deployed."
   value       = local.region
@@ -5,6 +9,10 @@ output "region" {
 output "iam_role_name" {
   description = "The name of the IAM role that the Lambda uses."
   value       = local.role_id
+}
+output "predetermined_lambda_arn" {
+  description = "The ARN that the Lambda function will have. This value is calculated before the Lambda is actually created, allowing it to be used in dependent IAM policies that must be created before the Lambda is created."
+  value       = local.predetermined_lambda_arn
 }
 output "lambda" {
   description = "The `aws_lambda_function` resource that was created."
@@ -31,9 +39,4 @@ output "complete" {
     aws_cloudwatch_event_target.lambda
   ]
   value = true
-}
-
-output "iam_role_arn" {
-  description = "The value of the `iam_role_arn` input variable if provided, or the ARN of the newly created role if not."
-  value       = module.iam_role_provided.provided ? var.iam_role_arn : aws_iam_role.lambda_role[0].arn
 }
